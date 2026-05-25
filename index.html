@@ -637,14 +637,14 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
             <line x1="45" y1="28" x2="45" y2="24" transform="rotate(270 45 45)"/>
             <line x1="45" y1="28" x2="45" y2="24" transform="rotate(315 45 45)"/>
           </g>
-          <!-- Lac birds (simplified) on outer ring -->
-          <g class="rdr" fill="#e8cc82" opacity=".7">
-            <ellipse cx="45" cy="5" rx="3" ry="1.8"/>
-            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(60 45 45)"/>
-            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(120 45 45)"/>
-            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(180 45 45)"/>
-            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(240 45 45)"/>
-            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(300 45 45)"/>
+          <!-- Diamond motifs on outer ring (thay chim) -->
+          <g class="rdr" fill="none" stroke="#e8cc82" stroke-width="0.8" opacity=".65">
+            <rect x="42.5" y="2.5" width="5" height="5" transform="rotate(45 45 5)"/>
+            <rect x="42.5" y="2.5" width="5" height="5" transform="rotate(45 45 5) rotate(60 45 45)"/>
+            <rect x="42.5" y="2.5" width="5" height="5" transform="rotate(45 45 5) rotate(120 45 45)"/>
+            <rect x="42.5" y="2.5" width="5" height="5" transform="rotate(45 45 5) rotate(180 45 45)"/>
+            <rect x="42.5" y="2.5" width="5" height="5" transform="rotate(45 45 5) rotate(240 45 45)"/>
+            <rect x="42.5" y="2.5" width="5" height="5" transform="rotate(45 45 5) rotate(300 45 45)"/>
           </g>
           <!-- Notch ticks on inner ring -->
           <g class="rdr2" stroke="#b8963a" stroke-width="1" opacity=".6">
@@ -750,316 +750,462 @@ const ioNav=new IntersectionObserver(e=>{
 },{rootMargin:'-35% 0px -60% 0px'});
 allSecs.forEach(s=>ioNav.observe(s));
 snDots.forEach(d=>{d.addEventListener('click',()=>{const t=document.getElementById(d.dataset.section);if(t)window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-64,behavior:'smooth'});});});
-const ioF=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){setTimeout(()=>{en.target.classList.add('visible');en.target.querySelectorAll('.skill-bar-inner').forEach(b=>b.style.width=b.dataset.w+'%');},en.target.dataset.delay||0);}});},{threshold:.1});
-document.querySelectorAll('.fade-up').forEach((el,i)=>{el.style.transitionDelay=(i%4*.07)+'s';ioF.observe(el);});
-const ioT=new IntersectionObserver(e=>{e.forEach((en,i)=>{if(en.isIntersecting)setTimeout(()=>en.target.classList.add('visible'),i*80);});},{threshold:.1});
+// ── Fade-up: re-animate every time element enters viewport ──
+const ioF=new IntersectionObserver(e=>{
+  e.forEach(en=>{
+    if(en.isIntersecting){
+      // Reset first so transition fires again even on re-entry
+      en.target.classList.remove('visible');
+      en.target.querySelectorAll('.skill-bar-inner').forEach(b=>b.style.width='0%');
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          en.target.classList.add('visible');
+          en.target.querySelectorAll('.skill-bar-inner').forEach(b=>{
+            setTimeout(()=>b.style.width=b.dataset.w+'%',120);
+          });
+        });
+      });
+    } else {
+      // Element left viewport — reset so it can animate again
+      en.target.classList.remove('visible');
+      en.target.querySelectorAll('.skill-bar-inner').forEach(b=>b.style.width='0%');
+    }
+  });
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-up').forEach((el,i)=>{
+  el.style.transitionDelay=(i%4*.07)+'s';
+  ioF.observe(el);
+});
+
+// ── Timeline items: re-animate on every entry ──
+const ioT=new IntersectionObserver(e=>{
+  e.forEach((en,i)=>{
+    if(en.isIntersecting){
+      en.target.classList.remove('visible');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        setTimeout(()=>en.target.classList.add('visible'),i*80);
+      }));
+    } else {
+      en.target.classList.remove('visible');
+    }
+  });
+},{threshold:.1});
 document.querySelectorAll('.timeline-item').forEach(t=>ioT.observe(t));
-const ioS=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.querySelectorAll('.skill-bar-inner').forEach(b=>{setTimeout(()=>b.style.width=b.dataset.w+'%',200);});});},{threshold:.2});
+
+// ── Skill bars standalone observer (belt-and-suspenders) ──
+const ioS=new IntersectionObserver(e=>{
+  e.forEach(en=>{
+    if(en.isIntersecting){
+      en.target.querySelectorAll('.skill-bar-inner').forEach(b=>{
+        b.style.width='0%';
+        setTimeout(()=>b.style.width=b.dataset.w+'%',200);
+      });
+    } else {
+      en.target.querySelectorAll('.skill-bar-inner').forEach(b=>b.style.width='0%');
+    }
+  });
+},{threshold:.15});
 document.querySelectorAll('.skills-grid').forEach(g=>ioS.observe(g));
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(!t)return;e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-64,behavior:'smooth'});});});
 
-/* ═══════════════════════════════════════════════════════════
-   VÒNG TRỐNG ĐỒNG ĐÔNG SƠN — Canvas Animation
-   Mô phỏng hoa văn trống đồng Đông Sơn: vòng đồng tâm,
-   hình học chim lạc, motif tia sáng và chim bay quanh rìa
-═══════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   TRỐNG ĐỒNG ĐÔNG SƠN — Particle Explosion System
+   Formed → scroll xuống → vỡ thành hàng nghìn hạt li ti
+   Scroll lại → hạt tụ về, trống đồng tái hiện hoàn chỉnh
+═══════════════════════════════════════════════════════════════════ */
 (function() {
   const canvas = document.getElementById('dongson-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let W, H, cx, cy, t = 0;
+
+  let W, H, cx, cy;
+  let animT = 0;
+  let scrollRatio = 0;
+  let targetRatio = 0;
+
+  const G1 = a => `rgba(184,150,58,${a})`;
+  const G2 = a => `rgba(232,204,130,${a})`;
 
   function resize() {
-    W = canvas.width = canvas.offsetWidth;
+    W = canvas.width  = canvas.offsetWidth;
     H = canvas.height = canvas.offsetHeight;
     cx = W / 2; cy = H / 2;
+    buildParticles();
   }
-  resize();
-  window.addEventListener('resize', resize);
 
-  // Gold color palette
-  const gold1 = 'rgba(184,150,58,';
-  const gold2 = 'rgba(232,204,130,';
-  const gold3 = 'rgba(250,243,222,';
+  /* ── Easing ── */
+  const easeIn3  = t => t*t*t;
+  const easeOut3 = t => 1 - Math.pow(1-t,3);
+  function easeOutBack(t) {
+    const c = 1.70158;
+    return 1 + (c+1)*Math.pow(t-1,3) + c*Math.pow(t-1,2);
+  }
 
-  // Draw a single Dong Son ring with decorative notches
-  function drawDongSonRing(r, lineW, alpha, notches, rotate) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotate);
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.strokeStyle = gold1 + alpha + ')';
-    ctx.lineWidth = lineW;
-    ctx.stroke();
+  /* ══════════════════════════════════════
+     BUILD PARTICLES — sample the drum shape
+  ══════════════════════════════════════ */
+  let particles = [];
 
-    if (notches > 0) {
-      const notchLen = r * 0.055;
-      for (let i = 0; i < notches; i++) {
-        const angle = (i / notches) * Math.PI * 2;
-        const x1 = Math.cos(angle) * (r - notchLen);
-        const y1 = Math.sin(angle) * (r - notchLen);
-        const x2 = Math.cos(angle) * (r + notchLen);
-        const y2 = Math.sin(angle) * (r + notchLen);
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = gold2 + (alpha * 0.8) + ')';
-        ctx.lineWidth = lineW * 0.6;
-        ctx.stroke();
+  function buildParticles() {
+    particles = [];
+    const R = Math.min(W, H) * 0.38;
+    const seed = (x,y) => {
+      // scattered destination: explode outward from center
+      const ang  = Math.atan2(y - cy, x - cx);
+      const bias = ang + (Math.random()-0.5) * 2.0;
+      const dist = R * (0.5 + Math.random() * 2.5);
+      return { ex: cx + Math.cos(bias)*dist, ey: cy + Math.sin(bias)*dist };
+    };
+
+    // ── Concentric rings ──
+    const ringDefs = [
+      {rf:1.00, n:300, bold:true },
+      {rf:0.90, n:220, bold:false},
+      {rf:0.80, n:220, bold:true },
+      {rf:0.70, n:200, bold:false},
+      {rf:0.60, n:185, bold:true },
+      {rf:0.50, n:165, bold:false},
+      {rf:0.40, n:140, bold:true },
+      {rf:0.30, n:110, bold:false},
+      {rf:0.20, n: 80, bold:true },
+    ];
+    ringDefs.forEach(({rf, n, bold}) => {
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2;
+        const jit = (Math.random()-0.5) * 2.5;
+        const hx = cx + Math.cos(a) * (R*rf + jit);
+        const hy = cy + Math.sin(a) * (R*rf + jit);
+        const {ex,ey} = seed(hx,hy);
+        // delay: outer rings explode first (delay≈0), inner last (delay≈0.4)
+        const delay = (1 - rf) * 0.4 + Math.random() * 0.08;
+        particles.push({
+          hx, hy, ex, ey,
+          r: bold ? 1.0 + Math.random()*0.8 : 0.6 + Math.random()*0.6,
+          baseAlpha: bold ? 0.55+Math.random()*0.35 : 0.35+Math.random()*0.3,
+          gold: Math.random() > 0.3,
+          delay
+        });
       }
-    }
-    ctx.restore();
-  }
+    });
 
-  // Draw sun-star center (mặt trời trống đồng)
-  function drawSunCenter(r, alpha, rot) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rot);
-    const rays = 12;
-    // Glow
-    const grd = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-    grd.addColorStop(0, gold2 + (alpha * 0.25) + ')');
-    grd.addColorStop(0.5, gold1 + (alpha * 0.08) + ')');
-    grd.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.fillStyle = grd;
-    ctx.fill();
+    // ── Notch tick marks on key rings ──
+    [1.00, 0.80, 0.60, 0.40].forEach((rf, ri) => {
+      const cnt = [20, 28, 20, 14][ri];
+      for (let i = 0; i < cnt; i++) {
+        const a = (i / cnt) * Math.PI * 2;
+        for (let d = -2; d <= 2; d++) {
+          const hx = cx + Math.cos(a) * (R*rf + d*1.6);
+          const hy = cy + Math.sin(a) * (R*rf + d*1.6);
+          const {ex,ey} = seed(hx,hy);
+          particles.push({
+            hx, hy, ex, ey, r: 1.3,
+            baseAlpha: 0.75, gold: true,
+            delay: (1-rf)*0.4 + 0.02 + Math.random()*0.06
+          });
+        }
+      }
+    });
 
-    // Center circle
-    ctx.beginPath();
-    ctx.arc(0, 0, r * 0.18, 0, Math.PI * 2);
-    ctx.fillStyle = gold1 + alpha + ')';
-    ctx.fill();
-
-    // Ray spokes
-    for (let i = 0; i < rays; i++) {
-      const a = (i / rays) * Math.PI * 2;
+    // ── Sun rays (12 spokes) ──
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
       const isMain = i % 3 === 0;
-      const len = isMain ? r * 0.9 : r * 0.65;
-      ctx.beginPath();
-      ctx.moveTo(Math.cos(a) * r * 0.2, Math.sin(a) * r * 0.2);
-      ctx.lineTo(Math.cos(a) * len, Math.sin(a) * len);
-      ctx.strokeStyle = isMain ? gold2 + alpha + ')' : gold1 + (alpha * 0.6) + ')';
-      ctx.lineWidth = isMain ? 1.5 : 0.8;
-      ctx.stroke();
-
-      // Arrow tip on main rays
+      const len = isMain ? R * 0.33 : R * 0.24;
+      const steps = isMain ? 28 : 16;
+      for (let s = 1; s <= steps; s++) {
+        const frac = s / steps;
+        const hx = cx + Math.cos(a) * (R*0.05 + frac*len);
+        const hy = cy + Math.sin(a) * (R*0.05 + frac*len);
+        const {ex,ey} = seed(hx,hy);
+        particles.push({
+          hx, hy, ex, ey,
+          r: isMain ? 1.5 - frac*0.4 : 0.9,
+          baseAlpha: 0.85 - frac*0.2,
+          gold: true,
+          delay: 0.38 + Math.random()*0.10   // center explodes last
+        });
+      }
+      // Arrowhead tip
       if (isMain) {
-        const tipX = Math.cos(a) * len;
-        const tipY = Math.sin(a) * len;
-        const perp = a + Math.PI / 2;
-        const tipSize = r * 0.045;
-        ctx.beginPath();
-        ctx.moveTo(tipX + Math.cos(a) * tipSize * 1.5, tipY + Math.sin(a) * tipSize * 1.5);
-        ctx.lineTo(tipX + Math.cos(perp) * tipSize, tipY + Math.sin(perp) * tipSize);
-        ctx.lineTo(tipX - Math.cos(perp) * tipSize, tipY - Math.sin(perp) * tipSize);
-        ctx.closePath();
-        ctx.fillStyle = gold2 + alpha + ')';
-        ctx.fill();
+        for (let k = 0; k < 6; k++) {
+          const oa = a + (k/6 - 0.5) * 0.18;
+          const hx = cx + Math.cos(oa) * (R*0.05 + len*1.05);
+          const hy = cy + Math.sin(oa) * (R*0.05 + len*1.05);
+          const {ex,ey} = seed(hx,hy);
+          particles.push({ hx, hy, ex, ey, r:1.2, baseAlpha:0.8, gold:true, delay:0.40 });
+        }
       }
     }
-    ctx.restore();
-  }
 
-  // Stylized Lạc bird (chim Lạc) flying along a ring
-  function drawLacBird(angle, ringR, alpha, scale) {
-    const bx = cx + Math.cos(angle) * ringR;
-    const by = cy + Math.sin(angle) * ringR;
-    ctx.save();
-    ctx.translate(bx, by);
-    ctx.rotate(angle + Math.PI / 2);
-    ctx.scale(scale, scale);
-    ctx.strokeStyle = gold2 + alpha + ')';
-    ctx.fillStyle = gold1 + (alpha * 0.3) + ')';
-    ctx.lineWidth = 0.8;
-
-    // Body
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 7, 3.5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-
-    // Crest (mào)
-    ctx.beginPath();
-    ctx.moveTo(-3, -3.5);
-    ctx.bezierCurveTo(-6, -9, -2, -11, 0, -8);
-    ctx.bezierCurveTo(2, -11, 6, -9, 3, -3.5);
-    ctx.closePath();
-    ctx.fillStyle = gold1 + alpha + ')';
-    ctx.fill();
-    ctx.stroke();
-
-    // Tail
-    ctx.beginPath();
-    ctx.moveTo(6, 0);
-    ctx.bezierCurveTo(10, -5, 14, -3, 12, 3);
-    ctx.bezierCurveTo(10, 7, 6, 5, 6, 0);
-    ctx.fillStyle = gold1 + (alpha * 0.7) + ')';
-    ctx.fill();
-    ctx.stroke();
-
-    // Wing
-    ctx.beginPath();
-    ctx.moveTo(-2, -1);
-    ctx.bezierCurveTo(-4, -6, 4, -8, 5, -3);
-    ctx.bezierCurveTo(4, -1, -1, -1, -2, -1);
-    ctx.fillStyle = gold2 + (alpha * 0.6) + ')';
-    ctx.fill();
-    ctx.stroke();
-
-    // Eye
-    ctx.beginPath();
-    ctx.arc(-4, -0.5, 1, 0, Math.PI * 2);
-    ctx.fillStyle = gold3 + alpha + ')';
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  // Concentric decorative band (zigzag / wave)
-  function drawDecoBand(r, alpha, rot, waveAmp) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rot);
-    const steps = 120;
-    ctx.beginPath();
-    for (let i = 0; i <= steps; i++) {
-      const a = (i / steps) * Math.PI * 2;
-      const wave = waveAmp * Math.sin(i * 0.5 * Math.PI * 2);
-      const rr = r + wave;
-      const x = Math.cos(a) * rr;
-      const y = Math.sin(a) * rr;
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    // ── Center sun disk ──
+    for (let i = 0; i < 180; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const rad = Math.random() * R * 0.14;
+      const hx = cx + Math.cos(a)*rad, hy = cy + Math.sin(a)*rad;
+      const {ex,ey} = seed(hx,hy);
+      particles.push({ hx, hy, ex, ey,
+        r: 0.8 + Math.random()*1.6, baseAlpha:0.75, gold:true,
+        delay: 0.42 + Math.random()*0.08
+      });
     }
-    ctx.closePath();
-    ctx.strokeStyle = gold1 + alpha + ')';
-    ctx.lineWidth = 0.7;
-    ctx.stroke();
-    ctx.restore();
+
+    // ── Diamond motif band (rf≈0.70) ──
+    for (let i = 0; i < 22; i++) {
+      const a = (i / 22) * Math.PI * 2;
+      const dr = R * 0.70;
+      for (let j = 0; j < 10; j++) {
+        const oa = a + (j/10 - 0.5) * 0.22;
+        const hx = cx + Math.cos(oa) * (dr + (Math.random()-0.5)*3);
+        const hy = cy + Math.sin(oa) * (dr + (Math.random()-0.5)*3);
+        const {ex,ey} = seed(hx,hy);
+        particles.push({ hx, hy, ex, ey, r:1.1, baseAlpha:0.6, gold:Math.random()>.3,
+          delay: 0.12 + Math.random()*0.10 });
+      }
+    }
+
+    // ── Ambient drift particles (always float gently) ──
+    for (let i = 0; i < 45; i++) {
+      particles.push({
+        hx: Math.random()*W, hy: Math.random()*H,
+        ex: Math.random()*W, ey: Math.random()*H,
+        r: 0.5 + Math.random()*1.0,
+        baseAlpha: 0.12 + Math.random()*0.15,
+        gold: Math.random()>0.4,
+        delay: 0, ambient: true,
+        vx: (Math.random()-0.5)*0.35,
+        vy: -0.08 - Math.random()*0.25,
+        phase: Math.random()*Math.PI*2
+      });
+    }
   }
 
-  // Geometric triangle dots band
-  function drawTriDots(r, alpha, rot, count) {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rot);
-    for (let i = 0; i < count; i++) {
-      const a = (i / count) * Math.PI * 2;
-      const x = Math.cos(a) * r;
-      const y = Math.sin(a) * r;
-      const tipA = a;
-      const size = 4;
+  /* ══════════════════════════════════════════════════════
+     VECTOR DRUM — drawn with crisp ctx.arc strokes
+     Shown at full opacity when sr=0, fades as sr→threshold
+  ══════════════════════════════════════════════════════ */
+  const EXPLODE_START = 0.08; // sr below this = pure vector
+  const EXPLODE_END   = 0.55; // sr above this = pure particles
+
+  function drawVectorDrum(R, rot, alpha) {
+    // Background halo
+    const grd = ctx.createRadialGradient(cx,cy,R*0.3,cx,cy,R*1.5);
+    grd.addColorStop(0, G1(alpha*0.04)); grd.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(cx,cy,R*1.5,0,Math.PI*2);
+    ctx.fillStyle=grd; ctx.fill();
+
+    // Ring definitions
+    const rings = [
+      {rf:1.00, lw:2.0, a:0.22, nd:20, sp: 0.0015},
+      {rf:0.90, lw:0.9, a:0.14, nd: 0, sp:-0.0020},
+      {rf:0.80, lw:1.6, a:0.26, nd:28, sp: 0.0020},
+      {rf:0.70, lw:0.8, a:0.14, nd: 0, sp:-0.0030},
+      {rf:0.60, lw:1.3, a:0.30, nd:20, sp: 0.0025},
+      {rf:0.50, lw:0.7, a:0.16, nd: 0, sp:-0.0040},
+      {rf:0.40, lw:1.5, a:0.34, nd:14, sp: 0.0030},
+      {rf:0.30, lw:0.6, a:0.18, nd: 0, sp:-0.0050},
+      {rf:0.20, lw:1.2, a:0.38, nd:12, sp: 0.0040},
+    ];
+    rings.forEach(rd => {
+      const r2 = R * rd.rf;
+      const rr = rot * rd.sp;
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(rr);
+      ctx.beginPath(); ctx.arc(0,0,r2,0,Math.PI*2);
+      ctx.strokeStyle = G1(rd.a * alpha); ctx.lineWidth = rd.lw; ctx.stroke();
+      // Notch ticks
+      if (rd.nd > 0) {
+        const nL = r2 * 0.055;
+        for (let i=0;i<rd.nd;i++) {
+          const a=(i/rd.nd)*Math.PI*2;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a)*(r2-nL), Math.sin(a)*(r2-nL));
+          ctx.lineTo(Math.cos(a)*(r2+nL), Math.sin(a)*(r2+nL));
+          ctx.strokeStyle = G2(rd.a*0.8*alpha); ctx.lineWidth=rd.lw*0.55; ctx.stroke();
+        }
+      }
+      ctx.restore();
+    });
+
+    // Diamond motif band at rf=0.70
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot*0.0008);
+    for (let i=0;i<20;i++) {
+      const a=(i/20)*Math.PI*2, dr=R*0.70, ds=5;
+      const dx2=Math.cos(a)*dr, dy2=Math.sin(a)*dr;
+      ctx.save(); ctx.translate(dx2,dy2); ctx.rotate(a+Math.PI/4);
       ctx.beginPath();
-      ctx.moveTo(x + Math.cos(tipA) * size, y + Math.sin(tipA) * size);
-      ctx.lineTo(x + Math.cos(tipA + 2.3) * size, y + Math.sin(tipA + 2.3) * size);
-      ctx.lineTo(x + Math.cos(tipA - 2.3) * size, y + Math.sin(tipA - 2.3) * size);
+      ctx.moveTo(0,-ds); ctx.lineTo(ds*0.6,0); ctx.lineTo(0,ds); ctx.lineTo(-ds*0.6,0);
       ctx.closePath();
-      ctx.fillStyle = gold1 + alpha + ')';
-      ctx.fill();
+      ctx.fillStyle=G1(0.28*alpha); ctx.strokeStyle=G2(0.35*alpha);
+      ctx.lineWidth=0.7; ctx.fill(); ctx.stroke();
+      ctx.restore();
     }
     ctx.restore();
+
+    // Wave / zigzag bands
+    [[0.88,0.001],[0.72,-0.0015],[0.56,0.002]].forEach(([rf,sp])=>{
+      const r2=R*rf, wA=r2*0.015;
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot*sp);
+      ctx.beginPath();
+      for(let i=0;i<=120;i++){
+        const a=(i/120)*Math.PI*2;
+        const rr2=r2+wA*Math.sin(i*0.5*Math.PI*2);
+        i===0 ? ctx.moveTo(Math.cos(a)*rr2, Math.sin(a)*rr2)
+               : ctx.lineTo(Math.cos(a)*rr2, Math.sin(a)*rr2);
+      }
+      ctx.closePath();
+      ctx.strokeStyle=G1(0.13*alpha); ctx.lineWidth=0.8; ctx.stroke();
+      ctx.restore();
+    });
+
+    // Triangle dot bands
+    [[0.80,0.0012,32],[0.64,-0.0018,24],[0.48,0.0025,16]].forEach(([rf,sp,cnt])=>{
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot*sp);
+      for(let i=0;i<cnt;i++){
+        const a=(i/cnt)*Math.PI*2, sz=4;
+        const tx=Math.cos(a)*R*rf, ty=Math.sin(a)*R*rf;
+        ctx.beginPath();
+        ctx.moveTo(tx+Math.cos(a)*sz, ty+Math.sin(a)*sz);
+        ctx.lineTo(tx+Math.cos(a+2.3)*sz, ty+Math.sin(a+2.3)*sz);
+        ctx.lineTo(tx+Math.cos(a-2.3)*sz, ty+Math.sin(a-2.3)*sz);
+        ctx.closePath();
+        ctx.fillStyle=G1(0.22*alpha); ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    // Sun center
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot*0.06);
+    const sunR=R*0.15;
+    // Glow
+    const sg=ctx.createRadialGradient(0,0,0,0,0,sunR*2.5);
+    sg.addColorStop(0,G2(0.2*alpha)); sg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(0,0,sunR*2.5,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+    // 12 rays
+    for(let i=0;i<12;i++){
+      const a=(i/12)*Math.PI*2, isM=i%3===0;
+      const len=isM?R*0.30:R*0.22;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(a)*sunR*1.1, Math.sin(a)*sunR*1.1);
+      ctx.lineTo(Math.cos(a)*len, Math.sin(a)*len);
+      ctx.strokeStyle=isM?G2(0.5*alpha):G1(0.3*alpha);
+      ctx.lineWidth=isM?1.5:0.8; ctx.stroke();
+      if(isM){
+        const tipX=Math.cos(a)*len, tipY=Math.sin(a)*len;
+        const perp=a+Math.PI/2, ts=R*0.04;
+        ctx.beginPath();
+        ctx.moveTo(tipX+Math.cos(a)*ts*1.5, tipY+Math.sin(a)*ts*1.5);
+        ctx.lineTo(tipX+Math.cos(perp)*ts, tipY+Math.sin(perp)*ts);
+        ctx.lineTo(tipX-Math.cos(perp)*ts, tipY-Math.sin(perp)*ts);
+        ctx.closePath(); ctx.fillStyle=G2(0.55*alpha); ctx.fill();
+      }
+    }
+    // Center disk
+    ctx.beginPath(); ctx.arc(0,0,sunR,0,Math.PI*2);
+    ctx.fillStyle=G1((0.65+0.15*Math.sin(animT*2))*alpha); ctx.fill();
+    ctx.restore();
+
+    // Outer pulse ring
+    const glA=(0.08+0.04*Math.sin(animT*1.5))*alpha;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+    ctx.strokeStyle=G1(glA); ctx.lineWidth=2.5+1.5*Math.sin(animT*1.5); ctx.stroke();
   }
 
-  // Floating particles (tia vàng)
-  const particles = Array.from({length: 30}, () => ({
-    x: Math.random() * 1,
-    y: Math.random() * 1,
-    r: 1 + Math.random() * 2,
-    speed: 0.0002 + Math.random() * 0.0004,
-    drift: (Math.random() - 0.5) * 0.3,
-    phase: Math.random() * Math.PI * 2,
-    alpha: 0.3 + Math.random() * 0.5
-  }));
-
-  // Main size logic — radius scales with viewport
-  function getDrumR() {
-    return Math.min(W, H) * 0.38;
-  }
-
+  /* ══════════════════════════════════════
+     DRAW LOOP — dual mode
+  ══════════════════════════════════════ */
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    t += 0.003;
-    const baseR = getDrumR();
+    animT += 0.003;
 
-    // ─── Outer ambient halo ───
-    const halo = ctx.createRadialGradient(cx, cy, baseR * 0.5, cx, cy, baseR * 1.5);
-    halo.addColorStop(0, 'rgba(184,150,58,0.03)');
-    halo.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath();
-    ctx.arc(cx, cy, baseR * 1.5, 0, Math.PI * 2);
-    ctx.fillStyle = halo;
-    ctx.fill();
+    scrollRatio += (targetRatio - scrollRatio) * 0.055;
+    const sr = Math.min(1, Math.max(0, scrollRatio));
+    const R  = Math.min(W, H) * 0.38;
+    const rot = animT; // cumulative rotation counter
 
-    // ─── Concentric rings (từ ngoài vào trong) ───
-    const ringData = [
-      { r: baseR * 1.0,  lw: 2.0, alpha: 0.18, notches: 16, speed: 0.0015 },
-      { r: baseR * 0.92, lw: 0.8, alpha: 0.12, notches: 0,  speed: -0.002 },
-      { r: baseR * 0.84, lw: 1.5, alpha: 0.22, notches: 24, speed: 0.002  },
-      { r: baseR * 0.76, lw: 0.7, alpha: 0.10, notches: 0,  speed: -0.003 },
-      { r: baseR * 0.68, lw: 1.2, alpha: 0.28, notches: 12, speed: 0.0025 },
-      { r: baseR * 0.60, lw: 0.6, alpha: 0.15, notches: 0,  speed: -0.004 },
-      { r: baseR * 0.52, lw: 1.0, alpha: 0.30, notches: 16, speed: 0.003  },
-      { r: baseR * 0.44, lw: 0.6, alpha: 0.12, notches: 0,  speed: -0.005 },
-      { r: baseR * 0.36, lw: 1.5, alpha: 0.35, notches: 8,  speed: 0.004  },
-      { r: baseR * 0.28, lw: 0.7, alpha: 0.20, notches: 0,  speed: -0.005 },
-    ];
-    ringData.forEach(rd => {
-      drawDongSonRing(rd.r, rd.lw, rd.alpha, rd.notches, t * rd.speed);
-    });
+    /* ── Blend factor: 0=fully vector, 1=fully particle ── */
+    const blend = Math.min(1, Math.max(0, (sr - EXPLODE_START) / (EXPLODE_END - EXPLODE_START)));
+    const vectorAlpha   = 1 - blend;          // vector fades out
+    const particleAlpha = blend;              // particles fade in
 
-    // ─── Decorative wave bands ───
-    drawDecoBand(baseR * 0.88, 0.12, t * 0.001, baseR * 0.012);
-    drawDecoBand(baseR * 0.72, 0.15, -t * 0.0015, baseR * 0.015);
-    drawDecoBand(baseR * 0.56, 0.15, t * 0.002, baseR * 0.018);
-
-    // ─── Triangle dot bands ───
-    drawTriDots(baseR * 0.80, 0.20, t * 0.0012, 32);
-    drawTriDots(baseR * 0.64, 0.22, -t * 0.0018, 24);
-    drawTriDots(baseR * 0.48, 0.25, t * 0.0025, 16);
-
-    // ─── Chim Lạc flying on ring (2 tầng chim) ───
-    const birds1 = 6;
-    for (let i = 0; i < birds1; i++) {
-      const a = (i / birds1) * Math.PI * 2 + t * 0.18;
-      drawLacBird(a, baseR * 0.76, 0.55, 1.1);
-    }
-    const birds2 = 4;
-    for (let i = 0; i < birds2; i++) {
-      const a = (i / birds2) * Math.PI * 2 - t * 0.12 + Math.PI / birds2;
-      drawLacBird(a, baseR * 0.56, 0.35, 0.75);
+    /* ═══ MODE A: VECTOR DRUM (sr near 0) ═══ */
+    if (vectorAlpha > 0.01) {
+      drawVectorDrum(R, rot, vectorAlpha);
     }
 
-    // ─── Sun center ───
-    drawSunCenter(baseR * 0.26, 0.55, t * 0.06);
+    /* ═══ MODE B: PARTICLES (sr > EXPLODE_START) ═══ */
+    if (particleAlpha > 0.01) {
+      const drumRot = rot * 0.007;
 
-    // ─── Outer ring glow pulse ───
-    const pulse = 0.06 + 0.04 * Math.sin(t * 1.5);
-    ctx.beginPath();
-    ctx.arc(cx, cy, baseR * 1.0, 0, Math.PI * 2);
-    ctx.strokeStyle = gold1 + pulse + ')';
-    ctx.lineWidth = 3 + 2 * Math.sin(t * 1.5);
-    ctx.stroke();
+      particles.forEach(p => {
+        if (p.ambient) {
+          p.phase += 0.009;
+          p.hx += p.vx + Math.sin(p.phase*0.4)*0.12;
+          p.hy += p.vy;
+          if (p.hy < -8) { p.hy = H+8; p.hx = Math.random()*W; }
+          const aa = p.baseAlpha * particleAlpha * 0.6;
+          ctx.beginPath(); ctx.arc(p.hx,p.hy,p.r,0,Math.PI*2);
+          ctx.fillStyle = p.gold ? G1(aa) : G2(aa);
+          ctx.fill();
+          return;
+        }
 
-    // ─── Floating particles ───
-    particles.forEach(p => {
-      p.phase += p.speed * 60;
-      const px = (p.x + p.drift * Math.sin(p.phase * 0.3) + 5) % 1;
-      const py = (p.y - p.speed * 40) % 1;
-      p.y = py < 0 ? 1 : py;
-      const a = (0.1 + 0.3 * Math.abs(Math.sin(p.phase))) * p.alpha;
-      ctx.beginPath();
-      ctx.arc(px * W, p.y * H, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = gold1 + a + ')';
-      ctx.fill();
-    });
+        // Per-particle explosion progress
+        const raw = Math.min(1, Math.max(0,
+          (sr - EXPLODE_START - p.delay*0.45) / (EXPLODE_END - EXPLODE_START - p.delay*0.3)
+        ));
+        const eT = easeIn3(Math.min(1,Math.max(0,raw)));
+
+        // Rotate home position with drum
+        const dx0=p.hx-cx, dy0=p.hy-cy;
+        const r0=Math.sqrt(dx0*dx0+dy0*dy0);
+        const ang0=Math.atan2(dy0,dx0);
+        const rotAmt=drumRot*(r0/R)*(1-sr);
+        const rhx=cx+Math.cos(ang0+rotAmt)*r0;
+        const rhy=cy+Math.sin(ang0+rotAmt)*r0;
+
+        const px=rhx+(p.ex-rhx)*eT;
+        const py=rhy+(p.ey-rhy)*eT;
+
+        const opacity = p.baseAlpha * particleAlpha * (1 - eT*0.85);
+        const sizeBoost = 1 + eT*(1-eT)*4.5;
+        const pSize = Math.max(0.3, p.r*sizeBoost);
+
+        ctx.beginPath(); ctx.arc(px,py,pSize,0,Math.PI*2);
+        ctx.fillStyle = p.gold ? G1(opacity) : G2(opacity*0.85);
+        ctx.fill();
+      });
+    }
+
+    /* ── Ambient particles always rendered softly ── */
+    if (sr < 0.05) {
+      particles.filter(p=>p.ambient).forEach(p=>{
+        const aa = p.baseAlpha * 0.7;
+        ctx.beginPath(); ctx.arc(p.hx,p.hy,p.r,0,Math.PI*2);
+        ctx.fillStyle = p.gold ? G1(aa) : G2(aa); ctx.fill();
+      });
+    }
 
     requestAnimationFrame(draw);
   }
+
+  /* ══════════════════════════════════════
+     SCROLL → targetRatio mapping
+     0 = hero fully visible, 1 = hero gone
+  ══════════════════════════════════════ */
+  function onScroll() {
+    const hero = document.getElementById('top');
+    if (!hero) return;
+    const heroH = hero.offsetHeight;
+    targetRatio = Math.min(1, Math.max(0, window.scrollY / (heroH * 0.62)));
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', () => { resize(); onScroll(); });
+
+  resize();
+  onScroll();
   draw();
 })();
+
 
 /* ═══════════════════════════════════════════════
    SKILLS SECTION — Animated Dong Son Drum Canvas
@@ -1155,31 +1301,24 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
       sx.restore();
     });
 
-    // Chim Lạc birds — 6 birds on outer band
-    const birdRing = R * 0.73;
-    for(let i=0;i<6;i++){
-      const a = (i/6)*Math.PI*2 + st*0.2;
-      const bx = cx + Math.cos(a)*birdRing;
-      const by = cy + Math.sin(a)*birdRing;
-      sx.save();
-      sx.translate(bx, by);
-      sx.rotate(a + Math.PI/2);
-      sx.scale(1.15, 1.15);
-      // body
-      sx.beginPath(); sx.ellipse(0,0,6,3,0,0,Math.PI*2);
-      sx.fillStyle = sg1+'0.55)'; sx.fill();
-      sx.strokeStyle = sg2+'0.75)'; sx.lineWidth=0.8; sx.stroke();
-      // crest
-      sx.beginPath(); sx.moveTo(-2,-3); sx.bezierCurveTo(-5,-8,-1,-10,0,-7); sx.bezierCurveTo(1,-10,5,-8,2,-3); sx.closePath();
-      sx.fillStyle = sg1+'0.7)'; sx.fill(); sx.stroke();
-      // tail
-      sx.beginPath(); sx.moveTo(5,0); sx.bezierCurveTo(9,-4,12,-2,10,3); sx.bezierCurveTo(8,6,5,4,5,0);
-      sx.fillStyle = sg1+'0.5)'; sx.fill(); sx.stroke();
-      // wing
-      sx.beginPath(); sx.moveTo(-1,-1); sx.bezierCurveTo(-3,-5,4,-7,4,-2); sx.bezierCurveTo(3,-1,-1,-1,-1,-1);
-      sx.fillStyle = sg2+'0.45)'; sx.fill(); sx.stroke();
+    // Diamond motif band (thay chim) — hoa văn thoi Đông Sơn
+    const dmCount = 18;
+    sx.save(); sx.translate(cx, cy); sx.rotate(st * 0.0015);
+    for(let i=0;i<dmCount;i++){
+      const a=(i/dmCount)*Math.PI*2;
+      const dr=R*0.73;
+      const dx=Math.cos(a)*dr, dy=Math.sin(a)*dr;
+      const ds=5.5;
+      sx.save(); sx.translate(dx,dy); sx.rotate(a+Math.PI/4);
+      sx.beginPath();
+      sx.moveTo(0,-ds); sx.lineTo(ds*0.65,0); sx.lineTo(0,ds); sx.lineTo(-ds*0.65,0);
+      sx.closePath();
+      sx.fillStyle=sg1+'0.55)';
+      sx.strokeStyle=sg2+'0.65)';
+      sx.lineWidth=0.8; sx.fill(); sx.stroke();
       sx.restore();
     }
+    sx.restore();
 
     // Sun center (mặt trời)
     const sunR = R * 0.17;
