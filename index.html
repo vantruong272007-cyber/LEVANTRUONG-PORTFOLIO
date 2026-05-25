@@ -223,7 +223,10 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);}
 .skill-cell{background:rgba(5,12,8,.75);padding:2.25rem 2rem;transition:background .4s;}
 .skill-cell:hover{background:rgba(10,61,46,.85);}
-.skill-icon{font-size:1.5rem;margin-bottom:.85rem;}
+.skill-icon{width:44px;height:44px;margin-bottom:1.1rem;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(184,150,58,.25);background:rgba(184,150,58,.06);flex-shrink:0;transition:border-color .3s,background .3s;}
+.skill-cell:hover .skill-icon{border-color:rgba(184,150,58,.55);background:rgba(184,150,58,.12);}
+.skill-icon svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s;}
+.skill-cell:hover .skill-icon svg{stroke:var(--gold-light);}
 .skill-name{font-family:'Times New Roman',Times,serif;font-size:1rem;font-style:italic;color:rgba(255,255,255,.88);margin-bottom:.5rem;}
 .skill-desc{font-size:.79rem;color:rgba(255,255,255,.38);line-height:1.7;margin-bottom:1.1rem;}
 .skill-bar-outer{height:2px;background:rgba(255,255,255,.08);}
@@ -243,7 +246,9 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 .reflection-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem;}
 .reflection-card{padding:1.75rem;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);transition:background .3s,border-color .3s;}
 .reflection-card:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);}
-.reflection-card-icon{font-size:1.4rem;margin-bottom:.75rem;}
+.reflection-card-icon{width:40px;height:40px;margin-bottom:.9rem;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid rgba(184,150,58,.3);background:rgba(184,150,58,.07);flex-shrink:0;transition:border-color .3s,background .3s;}
+.reflection-card:hover .reflection-card-icon{border-color:rgba(184,150,58,.6);background:rgba(184,150,58,.14);}
+.reflection-card-icon svg{width:18px;height:18px;stroke:var(--gold-light);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
 .reflection-card h4{font-family:'Times New Roman',Times,serif;font-size:1rem;font-style:italic;color:var(--gold-light);margin-bottom:.5rem;}
 .reflection-card p{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.8;}
 .lessons-list{display:flex;flex-direction:column;gap:1rem;margin-top:2rem;}
@@ -533,8 +538,8 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 <div class="orn">· · ·</div>
 
 <div class="section-full skills-bg" id="skills">
-  <svg class="skills-ds-deco" width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="250" cy="250" r="240" stroke="#b8963a" stroke-width="3"/><circle cx="250" cy="250" r="200" stroke="#b8963a" stroke-width="2"/><circle cx="250" cy="250" r="160" stroke="#b8963a" stroke-width="2"/><circle cx="250" cy="250" r="120" stroke="#b8963a" stroke-width="2"/><circle cx="250" cy="250" r="80" stroke="#b8963a" stroke-width="2"/><circle cx="250" cy="250" r="40" fill="#b8963a"/><g stroke="#b8963a" stroke-width="1.5" opacity="0.8"><line x1="250" y1="10" x2="250" y2="490"/><line x1="10" y1="250" x2="490" y2="250"/><line x1="80" y1="80" x2="420" y2="420"/><line x1="420" y1="80" x2="80" y2="420"/></g><g fill="#b8963a" opacity="0.7"><polygon points="250,30 260,50 240,50"/><polygon points="250,470 260,450 240,450"/><polygon points="30,250 50,260 50,240"/><polygon points="470,250 450,260 450,240"/></g></svg>
-  <div class="section-inner">
+  <canvas id="skills-drum-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.18;"></canvas>
+  <div class="section-inner" style="position:relative;z-index:1;">
     <div class="section-header fade-up">
       <p class="section-kicker" style="color:var(--gold);">III — Năng lực số</p>
       <h2 class="section-heading" style="color:var(--white);">Kỹ năng <em>đã tích lũy</em></h2>
@@ -542,12 +547,30 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
       <p class="section-lead" style="color:rgba(255,255,255,.45);">Sáu tuần xây dựng nền tảng vững chắc — từ thao tác cơ bản đến làm chủ AI tạo sinh.</p>
     </div>
     <div class="skills-grid fade-up">
-      <div class="skill-cell"><div class="skill-icon">📁</div><p class="skill-name">Quản lý tệp tin &amp; thư mục</p><p class="skill-desc">Cấu trúc nhiều cấp, quy tắc đặt tên CamelCase, thao tác đầy đủ trên Windows Explorer.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="90"></div></div><p class="skill-level">Thành thạo · 90%</p></div>
-      <div class="skill-cell"><div class="skill-icon">🔍</div><p class="skill-name">Tìm kiếm học thuật nâng cao</p><p class="skill-desc">Google Scholar, IEEE, ACM với toán tử nâng cao; đánh giá độ tin cậy theo 5 tiêu chí.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="85"></div></div><p class="skill-level">Thành thạo · 85%</p></div>
-      <div class="skill-cell"><div class="skill-icon">✍️</div><p class="skill-name">Prompt Engineering</p><p class="skill-desc">Role Prompting, Chain-of-Thought, Few-shot; thành thục trên 3 tác vụ học tập.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="88"></div></div><p class="skill-level">Thành thạo · 88%</p></div>
-      <div class="skill-cell"><div class="skill-icon">🤝</div><p class="skill-name">Hợp tác nhóm trực tuyến</p><p class="skill-desc">Trello Kanban + Google Workspace cho nhóm 12 người, phân công và theo dõi tiến độ.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="82"></div></div><p class="skill-level">Tốt · 82%</p></div>
-      <div class="skill-cell"><div class="skill-icon">🎨</div><p class="skill-name">Sáng tạo nội dung số AI</p><p class="skill-desc">Gemini + DALL-E + Canva AI trong quy trình sản xuất nội dung báo chí chuyên nghiệp.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="80"></div></div><p class="skill-level">Tốt · 80%</p></div>
-      <div class="skill-cell"><div class="skill-icon">⚖️</div><p class="skill-name">Đạo đức &amp; liêm chính học thuật</p><p class="skill-desc">Trích dẫn AI chuẩn APA 7, phân biệt hỗ trợ hợp lý vs. gian lận, nguyên tắc cá nhân.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="92"></div></div><p class="skill-level">Xuất sắc · 92%</p></div>
+      <div class="skill-cell">
+        <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></div>
+        <p class="skill-name">Quản lý tệp tin &amp; thư mục</p><p class="skill-desc">Cấu trúc nhiều cấp, quy tắc đặt tên CamelCase, thao tác đầy đủ trên Windows Explorer.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="90"></div></div><p class="skill-level">Thành thạo · 90%</p>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
+        <p class="skill-name">Tìm kiếm học thuật nâng cao</p><p class="skill-desc">Google Scholar, IEEE, ACM với toán tử nâng cao; đánh giá độ tin cậy theo 5 tiêu chí.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="85"></div></div><p class="skill-level">Thành thạo · 85%</p>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+        <p class="skill-name">Prompt Engineering</p><p class="skill-desc">Role Prompting, Chain-of-Thought, Few-shot; thành thục trên 3 tác vụ học tập.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="88"></div></div><p class="skill-level">Thành thạo · 88%</p>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <p class="skill-name">Hợp tác nhóm trực tuyến</p><p class="skill-desc">Trello Kanban + Google Workspace cho nhóm 12 người, phân công và theo dõi tiến độ.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="82"></div></div><p class="skill-level">Tốt · 82%</p>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <p class="skill-name">Sáng tạo nội dung số AI</p><p class="skill-desc">Gemini + DALL-E + Canva AI trong quy trình sản xuất nội dung báo chí chuyên nghiệp.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="80"></div></div><p class="skill-level">Tốt · 80%</p>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <p class="skill-name">Đạo đức &amp; liêm chính học thuật</p><p class="skill-desc">Trích dẫn AI chuẩn APA 7, phân biệt hỗ trợ hợp lý vs. gian lận, nguyên tắc cá nhân.</p><div class="skill-bar-outer"><div class="skill-bar-inner" data-w="92"></div></div><p class="skill-level">Xuất sắc · 92%</p>
+      </div>
     </div>
   </div>
 </div>
@@ -576,15 +599,81 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 <div class="reflection-wrap" id="reflection">
   <svg class="reflection-ds-deco" width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="200" cy="200" r="190" stroke="#b8963a" stroke-width="2.5"/><circle cx="200" cy="200" r="155" stroke="#b8963a" stroke-width="2"/><circle cx="200" cy="200" r="120" stroke="#b8963a" stroke-width="1.5"/><circle cx="200" cy="200" r="85" stroke="#b8963a" stroke-width="1.5"/><circle cx="200" cy="200" r="50" stroke="#b8963a" stroke-width="1.5"/><circle cx="200" cy="200" r="20" fill="#b8963a"/><g stroke="#b8963a" stroke-width="1" opacity="0.6"><line x1="200" y1="10" x2="200" y2="390"/><line x1="10" y1="200" x2="390" y2="200"/><line x1="65" y1="65" x2="335" y2="335"/><line x1="335" y1="65" x2="65" y2="335"/><line x1="200" y1="10" x2="200" y2="390" transform="rotate(22.5 200 200)"/><line x1="200" y1="10" x2="200" y2="390" transform="rotate(45 200 200)"/><line x1="200" y1="10" x2="200" y2="390" transform="rotate(67.5 200 200)"/></g><g fill="#b8963a" opacity="0.8"><polygon points="200,15 208,32 192,32"/><polygon points="200,385 208,368 192,368"/><polygon points="15,200 32,208 32,192"/><polygon points="385,200 368,208 368,192"/><polygon points="200,15 208,32 192,32" transform="rotate(45 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(90 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(135 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(180 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(225 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(270 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(315 200 200)"/></g></svg>
   <div class="reflection-inner">
-    <div class="fade-up">
-      <p class="section-kicker" style="color:var(--gold);">V — Tổng kết &amp; đánh giá bản thân</p>
-      <h2 class="section-heading" style="color:var(--white);">Hành trình <em>trưởng thành</em></h2>
-      <div class="section-rule"></div>
+    <div class="fade-up" style="display:flex;align-items:flex-start;gap:2.5rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:260px;">
+        <p class="section-kicker" style="color:var(--gold);">V — Tổng kết &amp; đánh giá bản thân</p>
+        <h2 class="section-heading" style="color:var(--white);">Hành trình <em>trưởng thành</em></h2>
+        <div class="section-rule"></div>
+      </div>
+      <!-- Dong Son drum SVG icon — inline, animated -->
+      <div style="flex-shrink:0;margin-top:.5rem;" aria-hidden="true">
+        <svg id="reflection-drum" width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;opacity:.75;">
+          <style>
+            #reflection-drum .rdr{transform-origin:45px 45px;animation:rdrSpin 18s linear infinite;}
+            #reflection-drum .rdr2{transform-origin:45px 45px;animation:rdrSpin 28s linear infinite reverse;}
+            #reflection-drum .rdr3{transform-origin:45px 45px;animation:rdrSpin 12s linear infinite;}
+            @keyframes rdrSpin{to{transform:rotate(360deg);}}
+            #reflection-drum .rpulse{animation:rpulse 3s ease-in-out infinite;}
+            @keyframes rpulse{0%,100%{opacity:.55;}50%{opacity:.95;}}
+          </style>
+          <!-- Outer ring -->
+          <circle class="rdr" cx="45" cy="45" r="42" stroke="#b8963a" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <!-- Second ring -->
+          <circle class="rdr2" cx="45" cy="45" r="35" stroke="#e8cc82" stroke-width="1" stroke-dasharray="6 4"/>
+          <!-- Third ring -->
+          <circle class="rdr" cx="45" cy="45" r="27" stroke="#b8963a" stroke-width="1.2" stroke-dasharray="3 3"/>
+          <!-- Inner ring -->
+          <circle cx="45" cy="45" r="19" stroke="#e8cc82" stroke-width="1" class="rdr2"/>
+          <!-- Center sun -->
+          <circle class="rpulse" cx="45" cy="45" r="8" fill="#b8963a" opacity=".9"/>
+          <!-- Sun rays -->
+          <g class="rdr3" stroke="#e8cc82" stroke-width="1.2" opacity=".8">
+            <line x1="45" y1="28" x2="45" y2="24"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(45 45 45)"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(90 45 45)"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(135 45 45)"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(180 45 45)"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(225 45 45)"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(270 45 45)"/>
+            <line x1="45" y1="28" x2="45" y2="24" transform="rotate(315 45 45)"/>
+          </g>
+          <!-- Lac birds (simplified) on outer ring -->
+          <g class="rdr" fill="#e8cc82" opacity=".7">
+            <ellipse cx="45" cy="5" rx="3" ry="1.8"/>
+            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(60 45 45)"/>
+            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(120 45 45)"/>
+            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(180 45 45)"/>
+            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(240 45 45)"/>
+            <ellipse cx="45" cy="5" rx="3" ry="1.8" transform="rotate(300 45 45)"/>
+          </g>
+          <!-- Notch ticks on inner ring -->
+          <g class="rdr2" stroke="#b8963a" stroke-width="1" opacity=".6">
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(0 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(30 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(60 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(90 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(120 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(150 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(180 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(210 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(240 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(270 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(300 45 45)"/>
+            <line x1="45" y1="27" x2="45" y2="23" transform="rotate(330 45 45)"/>
+          </g>
+        </svg>
+      </div>
     </div>
     <blockquote class="reflection-quote fade-up">"AI sẽ không thay thế bạn — nhưng một người biết sử dụng AI sẽ thay thế bạn. Câu hỏi không còn là 'AI có thể làm gì?' mà là 'Chúng ta có thể làm gì cùng với AI?'"</blockquote>
     <div class="reflection-grid fade-up">
-      <div class="reflection-card"><div class="reflection-card-icon">🎯</div><h4>Mục tiêu đã đạt được</h4><p>Hoàn thành 6/6 bài tập với chất lượng tốt. Xây dựng bộ kỹ năng số nền tảng từ quản lý tệp tin đến đạo đức AI. Portfolio tổng hợp đầy đủ và có hệ thống.</p></div>
-      <div class="reflection-card"><div class="reflection-card-icon">⚡</div><h4>Thách thức đã vượt qua</h4><p>Kiểm soát phiên bản khi 12 người cùng sửa Docs → Suggesting mode. Xác minh thông tin AI — đã học: AI bịa rất tự tin, phải kiểm tra mọi số liệu.</p></div>
+      <div class="reflection-card">
+        <div class="reflection-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h4>Mục tiêu đã đạt được</h4><p>Hoàn thành 6/6 bài tập với chất lượng tốt. Xây dựng bộ kỹ năng số nền tảng từ quản lý tệp tin đến đạo đức AI. Portfolio tổng hợp đầy đủ và có hệ thống.</p>
+      </div>
+      <div class="reflection-card">
+        <div class="reflection-card-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <h4>Thách thức đã vượt qua</h4><p>Kiểm soát phiên bản khi 12 người cùng sửa Docs → Suggesting mode. Xác minh thông tin AI — đã học: AI bịa rất tự tin, phải kiểm tra mọi số liệu.</p>
+      </div>
     </div>
     <div class="lessons-list fade-up">
       <div class="lesson-item"><div class="lesson-check">✓</div><p class="lesson-text"><strong>Tư duy phê phán là không thể thay thế:</strong> Dù AI viết trơn tru, nó thiếu linh hồn, trải nghiệm cá nhân và tư duy phản biện — thứ cốt lõi tạo nên giá trị học thuật.</p></div>
@@ -970,6 +1059,174 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click'
     requestAnimationFrame(draw);
   }
   draw();
+})();
+
+/* ═══════════════════════════════════════════════
+   SKILLS SECTION — Animated Dong Son Drum Canvas
+   Positioned at right side, large, clearly visible
+═══════════════════════════════════════════════ */
+(function(){
+  const sc = document.getElementById('skills-drum-canvas');
+  if(!sc) return;
+  const sx = sc.getContext('2d');
+  let sW, sH, st = 0;
+  function sResize(){
+    sW = sc.width = sc.offsetWidth;
+    sH = sc.height = sc.offsetHeight;
+  }
+  sResize();
+  window.addEventListener('resize', sResize);
+
+  const sg1 = 'rgba(184,150,58,';
+  const sg2 = 'rgba(232,204,130,';
+
+  function sDraw(){
+    sx.clearRect(0, 0, sW, sH);
+    st += 0.004;
+
+    // Place drum at right side, vertically centered
+    const cx = sW * 0.82;
+    const cy = sH * 0.5;
+    const R = Math.min(sW * 0.28, sH * 0.42, 220);
+
+    // Outer glow halo
+    const grd = sx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.4);
+    grd.addColorStop(0, 'rgba(184,150,58,0.07)');
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    sx.beginPath(); sx.arc(cx, cy, R*1.4, 0, Math.PI*2);
+    sx.fillStyle = grd; sx.fill();
+
+    // Draw concentric rings with varying speeds and directions
+    const rings = [
+      {r:1.00, lw:2.2, a:0.85, nd:20, sp:0.0012},
+      {r:0.88, lw:0.9, a:0.55, nd:0,  sp:-0.0018},
+      {r:0.78, lw:1.6, a:0.75, nd:28, sp:0.002},
+      {r:0.68, lw:0.8, a:0.45, nd:0,  sp:-0.003},
+      {r:0.58, lw:1.3, a:0.80, nd:16, sp:0.0025},
+      {r:0.46, lw:0.7, a:0.50, nd:0,  sp:-0.004},
+      {r:0.36, lw:1.6, a:0.85, nd:12, sp:0.0035},
+      {r:0.24, lw:0.7, a:0.55, nd:0,  sp:-0.005},
+    ];
+
+    rings.forEach(rd => {
+      const rr = R * rd.r;
+      const rot = st * rd.sp;
+      sx.save();
+      sx.translate(cx, cy);
+      sx.rotate(rot);
+      sx.beginPath();
+      sx.arc(0, 0, rr, 0, Math.PI*2);
+      sx.strokeStyle = sg1 + rd.a + ')';
+      sx.lineWidth = rd.lw;
+      sx.stroke();
+      if(rd.nd > 0){
+        for(let i=0;i<rd.nd;i++){
+          const a=(i/rd.nd)*Math.PI*2;
+          const nL=rr*0.05;
+          sx.beginPath();
+          sx.moveTo(Math.cos(a)*(rr-nL), Math.sin(a)*(rr-nL));
+          sx.lineTo(Math.cos(a)*(rr+nL), Math.sin(a)*(rr+nL));
+          sx.strokeStyle = sg2 + (rd.a*0.7) + ')';
+          sx.lineWidth = rd.lw * 0.5;
+          sx.stroke();
+        }
+      }
+      sx.restore();
+    });
+
+    // Triangle-dot bands (hoa văn hình học)
+    [0.83, 0.63, 0.42].forEach((rf, idx) => {
+      const rr = R * rf;
+      const cnt = [32, 24, 16][idx];
+      const rot = st * [0.001, -0.0015, 0.002][idx];
+      sx.save(); sx.translate(cx, cy); sx.rotate(rot);
+      for(let i=0;i<cnt;i++){
+        const a=(i/cnt)*Math.PI*2;
+        const tx=Math.cos(a)*rr, ty=Math.sin(a)*rr;
+        const sz=4;
+        sx.beginPath();
+        sx.moveTo(tx+Math.cos(a)*sz, ty+Math.sin(a)*sz);
+        sx.lineTo(tx+Math.cos(a+2.2)*sz, ty+Math.sin(a+2.2)*sz);
+        sx.lineTo(tx+Math.cos(a-2.2)*sz, ty+Math.sin(a-2.2)*sz);
+        sx.closePath();
+        sx.fillStyle = sg1 + '0.65)';
+        sx.fill();
+      }
+      sx.restore();
+    });
+
+    // Chim Lạc birds — 6 birds on outer band
+    const birdRing = R * 0.73;
+    for(let i=0;i<6;i++){
+      const a = (i/6)*Math.PI*2 + st*0.2;
+      const bx = cx + Math.cos(a)*birdRing;
+      const by = cy + Math.sin(a)*birdRing;
+      sx.save();
+      sx.translate(bx, by);
+      sx.rotate(a + Math.PI/2);
+      sx.scale(1.15, 1.15);
+      // body
+      sx.beginPath(); sx.ellipse(0,0,6,3,0,0,Math.PI*2);
+      sx.fillStyle = sg1+'0.55)'; sx.fill();
+      sx.strokeStyle = sg2+'0.75)'; sx.lineWidth=0.8; sx.stroke();
+      // crest
+      sx.beginPath(); sx.moveTo(-2,-3); sx.bezierCurveTo(-5,-8,-1,-10,0,-7); sx.bezierCurveTo(1,-10,5,-8,2,-3); sx.closePath();
+      sx.fillStyle = sg1+'0.7)'; sx.fill(); sx.stroke();
+      // tail
+      sx.beginPath(); sx.moveTo(5,0); sx.bezierCurveTo(9,-4,12,-2,10,3); sx.bezierCurveTo(8,6,5,4,5,0);
+      sx.fillStyle = sg1+'0.5)'; sx.fill(); sx.stroke();
+      // wing
+      sx.beginPath(); sx.moveTo(-1,-1); sx.bezierCurveTo(-3,-5,4,-7,4,-2); sx.bezierCurveTo(3,-1,-1,-1,-1,-1);
+      sx.fillStyle = sg2+'0.45)'; sx.fill(); sx.stroke();
+      sx.restore();
+    }
+
+    // Sun center (mặt trời)
+    const sunR = R * 0.17;
+    const grdSun = sx.createRadialGradient(cx,cy,0,cx,cy,sunR*2);
+    grdSun.addColorStop(0, 'rgba(232,204,130,0.3)');
+    grdSun.addColorStop(1, 'rgba(0,0,0,0)');
+    sx.beginPath(); sx.arc(cx,cy,sunR*2,0,Math.PI*2);
+    sx.fillStyle=grdSun; sx.fill();
+
+    // Sun rays
+    sx.save(); sx.translate(cx,cy); sx.rotate(st*0.08);
+    for(let i=0;i<12;i++){
+      const a=(i/12)*Math.PI*2;
+      const isMain=i%3===0;
+      const len = isMain ? R*0.82 : R*0.6;
+      sx.beginPath();
+      sx.moveTo(Math.cos(a)*sunR*1.1, Math.sin(a)*sunR*1.1);
+      sx.lineTo(Math.cos(a)*len, Math.sin(a)*len);
+      sx.strokeStyle = isMain ? sg2+'0.45)' : sg1+'0.28)';
+      sx.lineWidth = isMain ? 1.4 : 0.8;
+      sx.stroke();
+      if(isMain){
+        const tipX=Math.cos(a)*len, tipY=Math.sin(a)*len;
+        const perp=a+Math.PI/2; const ts=R*0.04;
+        sx.beginPath();
+        sx.moveTo(tipX+Math.cos(a)*ts*1.5,tipY+Math.sin(a)*ts*1.5);
+        sx.lineTo(tipX+Math.cos(perp)*ts,tipY+Math.sin(perp)*ts);
+        sx.lineTo(tipX-Math.cos(perp)*ts,tipY-Math.sin(perp)*ts);
+        sx.closePath();
+        sx.fillStyle=sg2+'0.5)'; sx.fill();
+      }
+    }
+    sx.restore();
+
+    // Center fill
+    sx.beginPath(); sx.arc(cx,cy,sunR,0,Math.PI*2);
+    sx.fillStyle=sg1+(0.6+0.15*Math.sin(st*2))+')'; sx.fill();
+
+    // Outer pulse ring
+    const op=0.25+0.15*Math.sin(st*1.5);
+    sx.beginPath(); sx.arc(cx,cy,R,0,Math.PI*2);
+    sx.strokeStyle=sg1+op+')';
+    sx.lineWidth=2.5+1.5*Math.sin(st*1.5); sx.stroke();
+
+    requestAnimationFrame(sDraw);
+  }
+  sDraw();
 })();
 </script>
 </body>
