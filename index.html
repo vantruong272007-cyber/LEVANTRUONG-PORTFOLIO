@@ -127,6 +127,23 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 .orn{position:relative;animation:ornShimmer 3s ease-in-out infinite;}
 @keyframes ornShimmer{0%,100%{opacity:.35;letter-spacing:10px;}50%{opacity:.65;letter-spacing:14px;}}
 
+/* ══ REVIEW SECTION ══ */
+.review-card-wrap{position:relative;background:var(--white);border:1px solid var(--rule);padding:3.5rem 3.5rem 2.5rem;max-width:860px;margin:0 auto;box-shadow:0 4px 40px rgba(10,61,46,.05);}
+.review-quotemark{position:absolute;top:-1.8rem;left:3rem;font-family:'Times New Roman',Times,serif;font-size:8rem;line-height:1;color:var(--gold);opacity:.18;pointer-events:none;user-select:none;}
+.review-body p{font-size:1rem;color:var(--ink-mid);line-height:2.05;margin-bottom:1.4rem;}
+.review-lead-para{font-size:1.05rem!important;color:var(--ink)!important;}
+.review-lead-para::first-letter{font-family:'Times New Roman',Times,serif;font-size:3.2rem;font-weight:700;color:var(--forest);float:left;line-height:.75;margin:.1rem .12rem 0 0;}
+.review-closing{border-left:3px solid var(--gold);padding-left:1.25rem;margin-top:1.5rem!important;}
+.review-tags{display:flex;flex-wrap:wrap;gap:8px;margin:2rem 0 2rem;}
+.review-tag{background:var(--forest-pale);color:var(--forest);border:1px solid rgba(10,61,46,.18);padding:5px 14px;font-size:.78rem;font-style:italic;border-radius:2px;transition:background .2s,color .2s;}
+.review-tag:hover{background:var(--forest);color:var(--gold-light);}
+.review-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-top:1.5rem;border-top:1px solid var(--rule);}
+.review-author{display:flex;align-items:center;gap:.85rem;}
+.review-author-avatar{width:44px;height:44px;border-radius:50%;background:var(--forest);color:var(--gold-light);font-family:'Times New Roman',Times,serif;font-size:.9rem;font-style:italic;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid rgba(184,150,58,.35);}
+.review-author-name{font-size:.92rem;color:var(--ink);font-weight:500;margin-bottom:2px;}
+.review-author-meta{font-size:.72rem;color:var(--ink-faint);font-style:italic;}
+.review-stars{font-size:1.2rem;color:var(--gold);letter-spacing:2px;}
+
 /* Contact avatar ring animation */
 .contact-avatar-circle{animation:avatarPulse 3s ease-in-out infinite;}
 @keyframes avatarPulse{0%,100%{box-shadow:0 0 0 0 rgba(184,150,58,0);}50%{box-shadow:0 0 0 8px rgba(184,150,58,.1);}}
@@ -139,6 +156,7 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 .hero-name{font-family:'Times New Roman',Times,serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:400;color:var(--white);line-height:1.05;letter-spacing:-2px;opacity:0;animation:fadeUp .9s .5s cubic-bezier(0.16,1,0.3,1) forwards;}
 .hero-name em{font-style:italic;color:var(--gold-light);}
 .hero-subtitle{font-size:1rem;font-style:italic;color:rgba(255,255,255,.42);margin-top:.5rem;opacity:0;animation:fadeUp .9s .7s cubic-bezier(0.16,1,0.3,1) forwards;}
+.hero-passion{font-size:.78rem;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-top:.6rem;opacity:0;animation:fadeUp .9s .85s cubic-bezier(0.16,1,0.3,1) forwards;}
 .hero-rule{width:100px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:2rem auto;opacity:0;animation:fadeUp .8s .9s cubic-bezier(0.16,1,0.3,1) forwards;}
 .hero-meta-row{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;margin:1rem 0 2rem;opacity:0;animation:fadeUp .8s 1s cubic-bezier(0.16,1,0.3,1) forwards;}
 .hero-meta-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
@@ -316,6 +334,7 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
   <div class="sn-dot" data-section="tasks"      data-label="Bài tập"></div>
   <div class="sn-dot" data-section="skills"     data-label="Kỹ năng"></div>
   <div class="sn-dot" data-section="principles" data-label="Nguyên tắc"></div>
+  <div class="sn-dot" data-section="review" data-label="Cảm nhận"></div>
   <div class="sn-dot" data-section="reflection" data-label="Tổng kết"></div>
   <div class="sn-dot" data-section="contact"    data-label="Liên hệ"></div>
 </div>
@@ -326,6 +345,7 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
     <li><a href="#tasks"      data-section="tasks">Bài tập</a></li>
     <li><a href="#skills"     data-section="skills">Kỹ năng</a></li>
     <li><a href="#principles" data-section="principles">Nguyên tắc</a></li>
+    <li><a href="#review" data-section="review">Cảm nhận</a></li>
     <li><a href="#reflection" data-section="reflection">Tổng kết</a></li>
     <li><a href="#contact"    data-section="contact">Liên hệ</a></li>
   </ul>
@@ -339,6 +359,7 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
     <p class="hero-eyebrow">Portfolio Kỹ thuật số · VNU1001_E252007 · 2025–2026</p>
     <h1 class="hero-name">Lê Văn <em>Trường</em></h1>
     <p class="hero-subtitle">Sinh viên Trường Đại học Công nghệ — Đại học Quốc gia Hà Nội</p>
+    <p class="hero-passion">Người Đam Mê Công Nghệ Và Nhiếp Ảnh</p>
     <div class="hero-rule"></div>
     <div class="hero-meta-row">
       <div class="hero-meta-item"><span class="hero-meta-label">Mã sinh viên</span><span class="hero-meta-value">25020855</span></div>
@@ -596,6 +617,56 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
 
 <div class="orn">· · ·</div>
 
+<!-- ══════════════════════════════════════════
+     IV.5 — CẢM NHẬN VỀ HỌC PHẦN
+══════════════════════════════════════════ -->
+<section class="section review-section" id="review">
+  <div class="section-header fade-up">
+    <p class="section-kicker">IV.5 — Cảm nhận cá nhân</p>
+    <h2 class="section-heading"><em>Điều tôi</em> <strong>cảm nhận được</strong></h2>
+    <div class="section-rule"></div>
+    <p class="section-lead">Những suy nghĩ thành thật sau một học kỳ trải nghiệm học phần Nhập môn Công nghệ số &amp; Ứng dụng Trí tuệ nhân tạo.</p>
+  </div>
+
+  <div class="review-card-wrap fade-up">
+    <!-- Opening quote mark decoration -->
+    <div class="review-quotemark" aria-hidden="true">"</div>
+
+    <div class="review-body">
+      <p class="review-lead-para">Thú thật lúc mới đăng ký, mình cứ nghĩ học online sẽ dễ bị nản, nhưng lộ trình của môn này lại được thiết kế cực kỳ thông minh. Việc kết hợp các bài giảng chia theo từng tuần cùng với các buổi học trực tiếp qua Zoom xen kẽ giúp mình luôn giữ được nhịp độ học tập mà không bị ngợp.</p>
+
+      <p>Kiến thức trong khóa học được xây dựng rất logic và đi từ gốc rễ. Ở những tuần đầu, mình được hệ thống lại nền tảng về máy tính, thiết bị ngoại vi và cách khai thác thông tin, dữ liệu một cách chuẩn xác. Nhưng phần cuốn hút nhất với mình bắt đầu từ giữa kỳ: đó là lúc được bước vào thế giới của Trí tuệ nhân tạo (AI) và học cách ứng dụng nó để sáng tạo nội dung số.</p>
+
+      <p>Điểm cộng rất lớn của học phần này là không chỉ dạy về công nghệ khô khan, mà còn đặc biệt đề cao đạo đức học đường. Giữa thời đại AI bùng nổ, việc khóa học nhấn mạnh sâu sắc vào <strong>liêm chính học thuật trên không gian mạng</strong> thực sự là một điểm sáng. Mình không chỉ học cách dùng AI, mà còn học cách làm chủ nó một cách minh bạch, biết cách trích dẫn nguồn chuẩn xác, tôn trọng bản quyền và tuyệt đối không lạm dụng công cụ để đạo văn.</p>
+
+      <p>Bên cạnh đó, các kỹ năng mềm thiết yếu như giao tiếp, hợp tác và an toàn thông tin cũng được trang bị rất kỹ lưỡng. Bài học cuối cùng về việc đưa AI vào ứng dụng thực tiễn trong Khoa học Tự nhiên và Kỹ thuật - Công nghệ nhờ thế mà trở nên trọn vẹn và mở mang tư duy cho mình rất nhiều.</p>
+
+      <p class="review-closing"><em>Tóm lại, đây không chỉ là một môn học lý thuyết, mà là một <strong>hành trang trọn vẹn</strong> cả về kỹ năng số lẫn đạo đức học thuật. Rất đáng để trải nghiệm!</em></p>
+    </div>
+
+    <div class="review-tags">
+      <span class="review-tag">📐 Lộ trình logic</span>
+      <span class="review-tag">🤖 Ứng dụng AI thực tiễn</span>
+      <span class="review-tag">⚖️ Liêm chính học thuật</span>
+      <span class="review-tag">🤝 Kỹ năng hợp tác</span>
+      <span class="review-tag">🔒 An toàn thông tin</span>
+    </div>
+
+    <div class="review-footer">
+      <div class="review-author">
+        <div class="review-author-avatar">LT</div>
+        <div>
+          <p class="review-author-name">Lê Văn Trường</p>
+          <p class="review-author-meta">25020855 · VNU1001_E252007 · Nhập môn CNTS &amp; UDTTNT</p>
+        </div>
+      </div>
+      <div class="review-stars" aria-label="5 sao">★★★★★</div>
+    </div>
+  </div>
+</section>
+
+<div class="orn">· · ·</div>
+
 <div class="reflection-wrap" id="reflection">
   <svg class="reflection-ds-deco" width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="200" cy="200" r="190" stroke="#b8963a" stroke-width="2.5"/><circle cx="200" cy="200" r="155" stroke="#b8963a" stroke-width="2"/><circle cx="200" cy="200" r="120" stroke="#b8963a" stroke-width="1.5"/><circle cx="200" cy="200" r="85" stroke="#b8963a" stroke-width="1.5"/><circle cx="200" cy="200" r="50" stroke="#b8963a" stroke-width="1.5"/><circle cx="200" cy="200" r="20" fill="#b8963a"/><g stroke="#b8963a" stroke-width="1" opacity="0.6"><line x1="200" y1="10" x2="200" y2="390"/><line x1="10" y1="200" x2="390" y2="200"/><line x1="65" y1="65" x2="335" y2="335"/><line x1="335" y1="65" x2="65" y2="335"/><line x1="200" y1="10" x2="200" y2="390" transform="rotate(22.5 200 200)"/><line x1="200" y1="10" x2="200" y2="390" transform="rotate(45 200 200)"/><line x1="200" y1="10" x2="200" y2="390" transform="rotate(67.5 200 200)"/></g><g fill="#b8963a" opacity="0.8"><polygon points="200,15 208,32 192,32"/><polygon points="200,385 208,368 192,368"/><polygon points="15,200 32,208 32,192"/><polygon points="385,200 368,208 368,192"/><polygon points="200,15 208,32 192,32" transform="rotate(45 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(90 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(135 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(180 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(225 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(270 200 200)"/><polygon points="200,15 208,32 192,32" transform="rotate(315 200 200)"/></g></svg>
   <div class="reflection-inner">
@@ -716,6 +787,7 @@ nav.sm{height:48px;background:rgba(3,10,6,0.98);}
       <a class="footer-sec-btn" href="#tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Bài tập</a>
       <a class="footer-sec-btn" href="#skills"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Kỹ năng</a>
       <a class="footer-sec-btn" href="#principles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Nguyên tắc</a>
+      <a class="footer-sec-btn" href="#review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Cảm nhận</a>
       <a class="footer-sec-btn" href="#reflection"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Tổng kết</a>
       <a class="footer-sec-btn" href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Liên hệ</a>
     </div>
